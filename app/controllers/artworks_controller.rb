@@ -2,7 +2,7 @@ class ArtworksController < ApplicationController
 
   def index
     @artworks = Artwork.all
-    render json: @hotels
+    render json: @artworks
   end
 
   def show
