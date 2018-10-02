@@ -1,4 +1,4 @@
-class GalleryWallsController < ApplicationController
+class Api::V1::GalleryWallsController < ApplicationController
 
   def create
     artwork = Artwork.find(params[:artwork_id])
