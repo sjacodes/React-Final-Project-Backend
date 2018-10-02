@@ -8,22 +8,22 @@
 
 require 'httparty'
 
-french_museums_data = HTTParty.get('https://api.art.rmngp.fr/v1/works/suggested?api_key=2b5f0f78c49d4fc7ca65cf71e55720f40aea49f5c68030fdd5e0de79331014cc&?facets%5Blocations%5D=centre%20national%20d%27art%20et%20de%20culture%20Georges-Pompidou&per_page=100')
+french_museums_data = HTTParty.get('https://api.art.rmngp.fr/v1/works/suggested?api_key=2b5f0f78c49d4fc7ca65cf71e55720f40aea49f5c68030fdd5e0de79331014cc&?facets%5Blocations%5D=centre%20national%20d%27art%20et%20de%20culture%20Georges-Pompidou&per_page=50')
 french_museums_artworks = french_museums_data["hits"]["hits"].map do |hit|
     { 
-         artist: hit["_source"]["authors"].empty? ? "No known author" : hit["_source"]["authors"][0]["name"]["en"],
+         artist: hit["_source"]["authors"].empty? ? "Unknown Artist" : hit["_source"]["authors"][0]["name"]["en"],
          collection: hit["_source"]["location"]["name"].values[0],
-         title: hit["_source"]["title"] ? hit["_source"]["title"].values[0] : 'No known title',
-         date: hit["_source"]["date"] ? hit["_source"]["date"].values[0] : 'No known date',
+         title: hit["_source"]["title"] ? hit["_source"]["title"].values[0] : 'Unknown Title',
+         date: hit["_source"]["date"] ? hit["_source"]["date"].values[0] : 'Unknown Date',
          image: hit["_source"]["images"][0]["urls"]["large"]["url"]
     }
 end
 
-harvard_museums_data = HTTParty.get('https://api.harvardartmuseums.org/object?apikey=5bccaf40-c23b-11e8-9f63-d310d7ffc861&century=20th%20century&hasimage=1&size=100')
+harvard_museums_data = HTTParty.get('https://api.harvardartmuseums.org/object?apikey=5bccaf40-c23b-11e8-9f63-d310d7ffc861&century=20th%20century&hasimage=1&size=20')
 harvard_museums_artworks = harvard_museums_data["records"].map do |record| 
     if record["images"].length > 0
          {
-             artist: record["people"].empty? ? "No known artist" : record["people"][0]["name"],
+             artist: record["people"].empty? ? "Unknown Artist" : record["people"][0]["name"],
              collection: record["creditline"] ? record["creditline"] : "No known collection",
              title: record["title"] ? record["title"] : "Unknown Title",
              date: record["dated"] ? record["dated"] : "Unknown Date",

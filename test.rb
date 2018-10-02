@@ -4,17 +4,21 @@ require 'pry'
 
 
 def getResponse
-    response = HTTParty.get('https://api.unsplash.com/collections/1110/photos?client_id=6362286e24c0efc976dbfa51c5abe684524bf8c96340be87bb5fd0fd1fc2c0a9&per_page=30')
-   new_arr = response.map do |record| 
-            {
-                artist: record["user"]["name"],
-                collection: "Images that capture the diversity of our world.",
-                title: record["description"] ? record["description"] : "Untitled",
-                date: record["created_at"].slice(0,4),
-                image: record["urls"]["regular"]
-            }
-    end
+    sf_moma_painting_and_sculpture = HTTParty.get('https://www.sfmoma.org/api/collection/artworks/department=Painting%20and%20Sculpture&page_size=50', headers: {"Authorization" => "5c6a3bfa479a3f383f4d3ced4c75c0a6c51fbe02"})
     binding.pry
+
+    new_arr = sf_moma_painting_and_sculpture["results"].map do |record| 
+        record["images"]
+        # if record["images"].length > 0
+        #     {
+        #         artist: record["artist"].length > 0 ? record["artist"][0]["name_display"] : "Unknown Artist",
+        #         collection: "SFMoMA Collection - Painting and Sculpture",
+        #         title: record["title"]["display"] ? record["title"]["display"] : "Untitled",
+        #         date: record["date"]["display"],
+        #         image: record["images"][0]["public_image"]
+        #     }
+        # end
+    end
 
 end
 
