@@ -1,4 +1,7 @@
 class GalleryWall < ApplicationRecord
     belongs_to :user
-    belongs_to :artwork
+    has_many :user_selections
+    has_many :artworks, through: :user_selections
+    has_many :captions
+    has_many :titles
 end

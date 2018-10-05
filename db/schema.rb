@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_02_091913) do
+ActiveRecord::Schema.define(version: 2018_10_05_080016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,14 +25,50 @@ ActiveRecord::Schema.define(version: 2018_10_02_091913) do
     t.string "date"
   end
 
-  create_table "gallery_wall", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "artwork_id"
-    t.string "title"
+  create_table "captions", force: :cascade do |t|
+    t.string "text"
+    t.bigint "gallery_wall_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["artwork_id"], name: "index_gallery_wall_on_artwork_id"
-    t.index ["user_id"], name: "index_gallery_wall_on_user_id"
+    t.integer "x_position"
+    t.integer "y_position"
+    t.integer "width"
+    t.integer "height"
+    t.boolean "rendered"
+    t.boolean "title"
+    t.index ["gallery_wall_id"], name: "index_captions_on_gallery_wall_id"
+  end
+
+  create_table "gallery_walls", force: :cascade do |t|
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_gallery_walls_on_user_id"
+  end
+
+  create_table "titles", force: :cascade do |t|
+    t.string "text"
+    t.bigint "gallery_wall_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "x_position"
+    t.integer "y_position"
+    t.integer "width"
+    t.integer "height"
+    t.index ["gallery_wall_id"], name: "index_titles_on_gallery_wall_id"
+  end
+
+  create_table "user_selections", force: :cascade do |t|
+    t.bigint "gallery_wall_id"
+    t.bigint "artwork_id"
+    t.integer "x_position"
+    t.integer "y_position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "width"
+    t.integer "height"
+    t.index ["artwork_id"], name: "index_user_selections_on_artwork_id"
+    t.index ["gallery_wall_id"], name: "index_user_selections_on_gallery_wall_id"
   end
 
   create_table "users", force: :cascade do |t|

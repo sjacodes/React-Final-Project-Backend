@@ -1,15 +1,15 @@
 class Api::V1::UsersController < ApplicationController
 
   def index
-    users = Users.all
-    render json: users
+    @users = User.all
+    render json: @users
   end
 
 
   def signin
     user = User.find_by(email: params[:email])
     if user && user.authenticate(params[:password])
-      render json: {email: user.email, token: issue_token({id: user.id})}
+      render json: {email: user.email, token: issue_token({id: user.id}), id: user.id}
     else
       render json: { error: 'Invalid username and password combination.' }, status: 400
     end
@@ -24,11 +24,18 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def get_galleries
+    @user = User.find(params[:id])
+    @galleries = GalleryWall.where(user: @user)
+    render json: @galleries
+  end
+
 
   def signup
     @user = User.create(email: params[:email], password: params[:password])
     if @user.valid?
       render json: {email: @user.email, token: issue_token({id: @user.id})}, status: :created
+      GalleryWall.create([{user_id: @user.id}, {user_id: @user.id}, {user_id: @user.id}])
     else
       render json: { error: 'failed to create user' }, status: :not_acceptable
     end
@@ -50,4 +57,19 @@ class Api::V1::UsersController < ApplicationController
     render json: @user
   end
 
+  def add_artwork
+    @user = User.find_by(email: params[:user_email])
+    @artwork = Artwork.find(params[:artwork_id])
+    @gallery_wall = @user.gallery_walls[params[:gallery_wall].to_i]
+    @added_artwork = UserSelection.create(artwork: @artwork, gallery_wall: @gallery_wall, x_position: 0, y_position: 0, width: params[:width], height: params[:height])
+    @galleries = GalleryWall.where(user: @user)
+    render json: @galleries
+  end
+
+
+
+  def show
+    @user = User.find(params[:id])
+    render json: @user
+  end
 end
