@@ -34,8 +34,8 @@ class Api::V1::UsersController < ApplicationController
   def signup
     @user = User.create(email: params[:email], password: params[:password])
     if @user.valid?
-      render json: {email: @user.email, token: issue_token({id: @user.id})}, status: :created
       GalleryWall.create([{user_id: @user.id}, {user_id: @user.id}, {user_id: @user.id}])
+      render json: {email: @user.email, token: issue_token({id: @user.id}), id: @user.id}, status: :created
     else
       render json: { error: 'failed to create user' }, status: :not_acceptable
     end
