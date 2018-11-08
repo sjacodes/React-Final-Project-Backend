@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
   def currrent_user
-    User.find(token_user_id)
+    currrent_user = User.find(token_user_id)
   end
 
   def issue_token(payload)
@@ -21,6 +21,10 @@ class ApplicationController < ActionController::API
 
   def token
     request.headers['Authorization']
+  end
+
+  def set_current_user
+    current_user = User.find(params[:id])
   end
 
   def secret

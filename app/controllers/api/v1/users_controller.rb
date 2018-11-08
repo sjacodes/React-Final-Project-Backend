@@ -8,6 +8,7 @@ class Api::V1::UsersController < ApplicationController
 
   def signin
     user = User.find_by(email: params[:email])
+    User.current = user
     if user && user.authenticate(params[:password])
       render json: {email: user.email, token: issue_token({id: user.id}), id: user.id}
     else
@@ -17,6 +18,7 @@ class Api::V1::UsersController < ApplicationController
 
   def validate
     user = currrent_user
+    User.current = user
     if user
       render json: {email: user.email, token: token}
     else
@@ -24,21 +26,28 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def get_galleries
-    @user = User.find(params[:id])
-    @galleries = GalleryWall.where(user: @user)
+  def get_current_user_galleries
+    user = Thread.current[:user]
+    @galleries = GalleryWall.where(user: user)
     render json: @galleries
   end
 
 
   def signup
     @user = User.create(email: params[:email], password: params[:password])
+    User.current = @user
     if @user.valid?
       GalleryWall.create([{user_id: @user.id}, {user_id: @user.id}, {user_id: @user.id}])
       render json: {email: @user.email, token: issue_token({id: @user.id}), id: @user.id}, status: :created
     else
       render json: { error: 'failed to create user' }, status: :not_acceptable
     end
+  end
+
+  def get_galleries
+    @user = User.find(params[:id])
+    @galleries = GalleryWall.where(user: @user)
+    render json: @galleries
   end
 
   def update

@@ -18,6 +18,8 @@ Rails.application.routes.draw do
       post '/signin', to: 'users#signin'
       get '/validate', to: 'users#validate'
       get 'users/:id/galleries', to: 'users#get_galleries'
+      get '/current_user_galleries', to: 'users#get_current_user_galleries'
+
       
 
     end
