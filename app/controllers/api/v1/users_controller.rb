@@ -18,8 +18,8 @@ class Api::V1::UsersController < ApplicationController
 
   def validate
     user = currrent_user
-    User.current = user
     if user
+      User.current = user
       render json: {email: user.email, token: token}
     else
       render json: {error: 'Validation failed.'}, status: 400
