@@ -18,6 +18,7 @@ class Api::V1::UsersController < ApplicationController
 
   def validate
     user = currrent_user
+    byebug
     if user
       User.current = user
       render json: {email: user.email, token: token}

@@ -7,6 +7,9 @@ Rails.application.routes.draw do
       resources :user_selections
       resources :titles
       resources :captions
+      get '/validate', to: 'users#validate'
+      get 'users/:id/galleries', to: 'users#get_galleries'
+      get '/current_user_galleries', to: 'users#get_current_user_galleries'
       post '/add_artwork', to: 'users#add_artwork'
       patch '/move_artwork', to: 'user_selections#move_artwork'
       patch '/resize_artwork', to: 'user_selections#resize_artwork'
@@ -16,9 +19,7 @@ Rails.application.routes.draw do
       patch 'captions/:id/edit', to: 'captions#edit'
       post '/signup', to: 'users#signup'
       post '/signin', to: 'users#signin'
-      get '/validate', to: 'users#validate'
-      get 'users/:id/galleries', to: 'users#get_galleries'
-      get '/current_user_galleries', to: 'users#get_current_user_galleries'
+
 
       
 
