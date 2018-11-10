@@ -23,10 +23,6 @@ class ApplicationController < ActionController::API
     request.headers['Authorization']
   end
 
-  def set_current_user
-    current_user = User.find(params[:id])
-  end
-
   def secret
     'shh'
   end
