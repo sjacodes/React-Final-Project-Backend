@@ -18,7 +18,7 @@ class Api::V1::UsersController < ApplicationController
 
   def validate
     user = currrent_user
-    User.current = user
+    Rails.cache.write("user", user.id)
     if user
       render json: {email: user.email, id: user.id, token: token, user_now: User.current}
     else
@@ -27,9 +27,10 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def get_current_user_galleries
-    user = Thread.current[:user]
-    @galleries = GalleryWall.where(user: user)
-    render json: user
+    user_id = Rails.cache.read("user")
+    @user = User.find(user_id)
+    @galleries = GalleryWall.where(user: @user)
+    render json: @galleries
   end
 
 
