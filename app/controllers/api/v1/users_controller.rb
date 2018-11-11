@@ -29,7 +29,7 @@ class Api::V1::UsersController < ApplicationController
   def get_current_user_galleries
     user = Thread.current[:user]
     @galleries = GalleryWall.where(user: user)
-    render json: @galleries
+    render json: user
   end
 
 
