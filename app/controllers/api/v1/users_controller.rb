@@ -40,7 +40,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.create(email: params[:email], password: params[:password])
     if @user.valid?
       GalleryWall.create([{user_id: @user.id}, {user_id: @user.id}, {user_id: @user.id}])
-      Rails.cache.write("user", user.id)
+      Rails.cache.write("user", @user.id)
       cache_user_id = Rails.cache.read("user")
       render json: {email: @user.email, token: issue_token({id: @user.id}), id: @user.id, saved_id: cache_user_id}, status: :created
     else
