@@ -6,13 +6,7 @@ class User < ApplicationRecord
     has_secure_password
     validates :email, uniqueness: { case_sensitive: false}
 
-    def self.current
-        Thread.current[:user]
-      end
-      
-    def self.current=(user)
-        Thread.current[:user] = user
-    end
+
 
 
 end

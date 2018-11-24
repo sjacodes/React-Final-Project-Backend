@@ -20,15 +20,16 @@ class Api::V1::UsersController < ApplicationController
     user = currrent_user
     Rails.cache.write("user", user.id)
     if user
-      render json: {email: user.email, id: user.id, token: token, user_now: User.current}
+      render json: {email: user.email, id: user.id, token: token}
     else
       render json: {error: 'Validation failed.'}, status: 400
     end
   end
 
   def get_current_user_galleries
+    userId = params[:user_id]
     user_id = Rails.cache.read("user")
-    @user = User.find(user_id)
+    @user = User.find(userId)
     @galleries = GalleryWall.where(user: @user)
     render json: @galleries
   end
