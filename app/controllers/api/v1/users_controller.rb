@@ -19,8 +19,9 @@ class Api::V1::UsersController < ApplicationController
   def validate
     user = currrent_user
     Rails.cache.write("user", user.id)
+    user_id = Rails.cache.read("user")
     if user
-      render json: {email: user.email, id: user.id, token: token}
+      render json: {email: user.email, id: user.id, token: token saved_id: user_id}
     else
       render json: {error: 'Validation failed.'}, status: 400
     end
