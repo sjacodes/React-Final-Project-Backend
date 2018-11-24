@@ -27,9 +27,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def get_current_user_galleries
-    userId = params[:user_id]
     user_id = Rails.cache.read("user")
-    @user = User.find(userId)
+    @user = User.find(user_id)
     @galleries = GalleryWall.where(user: @user)
     render json: @galleries
   end
