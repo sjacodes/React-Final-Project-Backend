@@ -8,7 +8,6 @@ class Api::V1::UsersController < ApplicationController
 
   def signin
     user = User.find_by(email: params[:email])
-    User.current = user
     if user && user.authenticate(params[:password])
       render json: {email: user.email, token: issue_token({id: user.id}), id: user.id}
     else
